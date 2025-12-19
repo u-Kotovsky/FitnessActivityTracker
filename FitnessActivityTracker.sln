@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessActivityTrackerLibrary", "FitnessActivityTrackerLibrary\FitnessActivityTrackerLibrary.csproj", "{A5262422-7309-4155-AD17-6DFFEEDB3BB3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitnessActivityTrackerUI", "FitnessActivityTrackerUI\FitnessActivityTrackerUI.csproj", "{B458B084-8FD6-49B8-B6A7-D2B2AC620927}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A5262422-7309-4155-AD17-6DFFEEDB3BB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5262422-7309-4155-AD17-6DFFEEDB3BB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5262422-7309-4155-AD17-6DFFEEDB3BB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5262422-7309-4155-AD17-6DFFEEDB3BB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B458B084-8FD6-49B8-B6A7-D2B2AC620927}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B458B084-8FD6-49B8-B6A7-D2B2AC620927}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B458B084-8FD6-49B8-B6A7-D2B2AC620927}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B458B084-8FD6-49B8-B6A7-D2B2AC620927}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1E8974FE-0EC9-485F-B3B1-17F571AF808A}
+	EndGlobalSection
+EndGlobal

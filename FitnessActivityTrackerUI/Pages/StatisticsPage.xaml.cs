@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace FitnessActivityTrackerUI
+namespace FitnessActivityTrackerUI.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для AddEditWorkoutWindow.xaml
+    /// Interaction logic for StatisticsPage.xaml
     /// </summary>
-    public partial class AddEditWorkoutWindow : Window
+    public partial class StatisticsPage : Page
     {
-        public AddEditWorkoutWindow()
+        public StatisticsPage()
         {
             InitializeComponent();
         }

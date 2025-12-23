@@ -8,4 +8,13 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FitnessActivityTracker.Core\FitnessActivityTracker.Core.csproj" />
+    <ProjectReference Include="..\FitnessActivityTracker.Data\FitnessActivityTracker.Data.csproj" />
+  </ItemGroup>
+
 </Project>

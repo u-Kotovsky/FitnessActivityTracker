@@ -1,4 +1,4 @@
-﻿namespace FitnessActivityTrackerLibrary;
+﻿namespace FitnessActivityTracker.Core.Models;
 
 public enum WorkoutStatus // prob missing, active
 {

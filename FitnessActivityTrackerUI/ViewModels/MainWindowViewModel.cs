@@ -25,10 +25,6 @@ namespace FitnessActivityTrackerUI.ViewModels
 
             RefreshCollections();
 
-            for (int i = 0; i < 31; i++)
-            {
-                CalendarItems.Add(i + 1);
-            }
 
             //ComingWorkouts.Add(new Workout());
         }
@@ -37,7 +33,11 @@ namespace FitnessActivityTrackerUI.ViewModels
         {
             Workouts = [.. _workoutService.GetAllWorkouts()];
             CalendarItems = [];
-            ComingWorkouts = [.. _workoutService.GetAllWorkouts().Where(x => x.Status == WorkoutStatus.Planned)];
+            for (int i = 0; i < 31; i++)
+            {
+                CalendarItems.Add(i + 1);
+            }
+            ComingWorkouts = [.. _workoutService.GetAllWorkouts()];
         }
 
         private ObservableCollection<Workout> workouts;

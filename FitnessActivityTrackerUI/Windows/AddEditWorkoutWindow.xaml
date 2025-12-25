@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FitnessActivityTrackerUI.Windows"
         xmlns:wpfTool="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
         mc:Ignorable="d"
-        Title="Добавить или изменить тренировку" Height="200" Width="300">
+        Title="Добавить или изменить тренировку" Height="240" Width="300">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -25,21 +25,28 @@
                 <RowDefinition Height="25"/>
                 <RowDefinition Height="25"/>
                 <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
             <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Тип тренировки</Label>
-            <ComboBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" ItemsSource="{Binding WorkoutTypes}"/>
+            <ComboBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" SelectedItem="{Binding SelectedType}" ItemsSource="{Binding WorkoutTypes}"/>
 
             <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Дата и время</Label>
-            <wpfTool:DateTimePicker Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Value="{Binding Date}"/>
+            <wpfTool:DateTimePicker Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Value="{Binding SelectedDate}"/>
 
             <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">Продолжительность</Label>
             <wpfTool:DecimalUpDown Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Value="{Binding DurationMinutes}"/>
 
             <Label Grid.Column="0" Grid.Row="3" VerticalAlignment="Center">Интенсивность</Label>
-            <ComboBox Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" ItemsSource="{Binding Intensities}"/>
+            <ComboBox Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" SelectedItem="{Binding SelectedIntensity}" ItemsSource="{Binding Intensities}"/>
 
-            <Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center">Дистанция</Label>
-            <wpfTool:DecimalUpDown Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" Value="{Binding DistanceKm}"/>
+            <Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center">Статус</Label>
+            <ComboBox Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" SelectedItem="{Binding SelectedStatus}" ItemsSource="{Binding Statuses}"/>
+
+            <Label Grid.Column="0" Grid.Row="5" VerticalAlignment="Center">Дистанция</Label>
+            <wpfTool:DecimalUpDown Grid.Column="1" Grid.Row="5" VerticalAlignment="Center" Minimum="0" Value="{Binding DistanceKm}"/>
+
+            <Label Grid.Column="0" Grid.Row="6" VerticalAlignment="Center">Рейтинг</Label>
+            <wpfTool:DecimalUpDown Grid.Column="1" Grid.Row="6" VerticalAlignment="Center" Maximum="5" Minimum="1" Value="{Binding Rating}"/>
         </Grid>
 
         <Grid Grid.Row="1">
@@ -48,8 +55,8 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Command="{Binding SaveCommand}">Сохранить</Button>
-            <Button Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Command="{Binding CancelCommand}">Отмена</Button>
+            <Button Grid.Column="0" Grid.Row="1" Command="{Binding SaveCommand}">Сохранить</Button>
+            <Button Grid.Column="1" Grid.Row="1" Command="{Binding CancelCommand}">Отмена</Button>
         </Grid>
     </Grid>
 </Window>

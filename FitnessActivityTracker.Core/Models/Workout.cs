@@ -14,7 +14,7 @@ public class Workout : INotifyPropertyChanged
 
     // обязательное поле
     private DateTime date;
-    public DateTime Date { get { return date; } set { date = value; OnPropertyChanged(); } }
+    public DateTime Date { get { if (date == default) date = DateTime.Now; return date; } set { date = value; OnPropertyChanged(); } }
 
     // в минутах
     private int durationMinutes;

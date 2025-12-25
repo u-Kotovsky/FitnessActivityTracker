@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows;
 using FitnessActivityTracker.Core.Models;
 using FitnessActivityTracker.Core.Services;
@@ -130,8 +131,11 @@ namespace FitnessActivityTrackerUI.ViewModels
             _userSettingsService = userSettings;
 
             WorkoutTypes = [.. Enum.GetValues<WorkoutType>()];
+            SelectedType = 0;
             Intensities = [.. Enum.GetValues<Intensity>()];
+            SelectedIntensity = 0;
             Statuses = [.. Enum.GetValues<WorkoutStatus>()];
+            SelectedStatus = 0;
 
             _workout = workout;
         }
@@ -144,7 +148,6 @@ namespace FitnessActivityTrackerUI.ViewModels
                 return saveCommand ??= new RelayCommand(obj =>
                 {
                     Save();
-                    Callback?.Invoke();
                 });
             }
             set
@@ -161,7 +164,6 @@ namespace FitnessActivityTrackerUI.ViewModels
                 return cancelCommand ??= new RelayCommand(obj =>
                 {
                     Cancel();
-                    Callback?.Invoke();
                 });
             }
             set
@@ -175,15 +177,15 @@ namespace FitnessActivityTrackerUI.ViewModels
 
         private void Save()
         {
-            if (!string.IsNullOrEmpty(this.InputDataError))
+            if (!string.IsNullOrEmpty(InputDataError))
             {
+                MessageBox.Show(InputDataError, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             try
             {
-                if (Workout == null)
-                    throw new Exception("Workout is null");
+                if (Workout == null) throw new Exception("Workout is null");
 
                 Workout.BurnedCalories = _calorieCalculator.CalculateCalories(
                     Workout.Type, Workout.DurationMinutes, Workout.Intensity, _userSettingsService.GetUserWeightKg());
@@ -202,51 +204,42 @@ namespace FitnessActivityTrackerUI.ViewModels
                 MessageBox.Show($"Ошибка при сохранении: {ex.Message}");
             }
 
-            // TODO: Call an event something like OnSave
+            Callback?.Invoke();
         }
 
         private void Cancel()
         {
-            // TODO: Cancel, call an event something like OnCancel
+            Callback?.Invoke();
         }
 
-        public string InputDataError => null;
+        public string InputDataError = null;
 
-        public string this[string columnName]
+        private void CalculateInputErrors()
         {
-            get
-            {
-                switch (columnName)
-                {
-                    case nameof(SelectedDate):
-                        if (SelectedDate < DateTime.Today && SelectedStatus == WorkoutStatus.Planned)
-                            return "Дата для запланированной тренировки не может быть в прошлом.";
-                        break;
-                    case nameof(DurationMinutes):
-                        if (DurationMinutes <= 0)
-                            return "Продолжительность должна быть больше 0.";
-                        break;
-                    case nameof(DistanceKm):
-                        if ((SelectedType == WorkoutType.Strength || SelectedType == WorkoutType.Yoga) && DistanceKm.HasValue && DistanceKm.Value > 0)
-                            return "Дистанция не применима к силовым тренировкам.";
-                        if (DistanceKm.HasValue && DistanceKm.Value < 0)
-                            return "Дистанция не может быть отрицательной.";
-                        break;
-                    case nameof(Rating):
-                        if (Rating < 1 || Rating > 5)
-                            return "Рейтинг должен быть от 1 до 5.";
-                        break;
-                }
+            StringBuilder errors = new StringBuilder();
 
-                throw new Exception($"Unknown column name '{columnName}'");
-            }
+            if (SelectedDate.Ticks < DateTime.Now.Ticks && SelectedStatus == WorkoutStatus.Planned)
+                errors.AppendLine("Дата для запланированной тренировки не может быть в прошлом.");
+
+            if (DurationMinutes <= 0)
+                errors.AppendLine("Продолжительность должна быть больше 0.");
+
+            if ((SelectedType == WorkoutType.Strength || SelectedType == WorkoutType.Yoga) && DistanceKm.HasValue && DistanceKm.Value > 0)
+                errors.AppendLine("Дистанция не применима к силовым тренировкам.");
+            if (DistanceKm.HasValue && DistanceKm.Value < 0)
+                errors.AppendLine("Дистанция не может быть отрицательной.");
+
+            if (Rating < 1 || Rating > 5)
+                errors.AppendLine("Рейтинг должен быть от 1 до 5.");
+
+            InputDataError = errors.ToString();
         }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            CalculateInputErrors();
         }
     }
 }

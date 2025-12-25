@@ -5,8 +5,59 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FitnessActivityTrackerUI"
         mc:Ignorable="d"
-        Title="FitnessActivityTracker - Starting" Height="450" Width="800">
+        Title="FitnessActivityTracker" Height="550" Width="550">
     <Grid>
-        <Label>Starting..</Label>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Calendar-like workout grid with color-indication of acitivty type -->
+        <Grid Grid.Row="0">
+            <DataGrid x:Name="DataGrid_Calendar" ItemsSource="{Binding CalendarItems}">
+            </DataGrid>
+        </Grid>
+        
+        <!-- List of coming workouts -->
+        <Grid Grid.Row="1">
+            <!-- Quick change of status -->
+            <DataGrid ItemsSource="{Binding ComingWorkouts}">
+                
+            </DataGrid>
+        </Grid>
+        
+        <!-- Statistics panel -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <!-- Progress graphs by time of workouts and calories -->
+            <!-- Radial diagram, workout types -->
+            <!-- Compare values by weeks/months -->
+            <!-- Achivements and records -->
+        </Grid>
+
+        <!-- Add/Duplicate/Edit/Cancel workout -->
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Command="{Binding AddCommand}">Добавить тренировку</Button>
+            <Button Grid.Column="1" Command="{Binding DuplicateCommand}">Дублировать</Button>
+            <Button Grid.Column="2" Command="{Binding EditCommand}">Редактировать</Button>
+            <Button Grid.Column="3" Command="{Binding CancelCommand}">Отменить тренировку</Button>
+        </Grid>
     </Grid>
 </Window>

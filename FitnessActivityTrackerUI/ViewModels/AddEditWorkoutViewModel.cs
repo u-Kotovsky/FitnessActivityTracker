@@ -24,6 +24,13 @@ namespace FitnessActivityTrackerUI.ViewModels
             set { _workout = value; OnPropertyChanged(); }
         }
 
+        private WorkoutViewModel _workoutViewModel;
+        public WorkoutViewModel WorkoutViewModel 
+        {
+            get { return _workoutViewModel; }
+            set { _workoutViewModel = value; } 
+        }
+
         public WorkoutType SelectedType
         {
             get => Workout?.Type ?? default;
@@ -115,15 +122,41 @@ namespace FitnessActivityTrackerUI.ViewModels
         public AddEditWorkoutViewModel(
             IWorkoutService workoutService, 
             ICalorieCalculatorService calorieCalculator, 
-            IUserSettingsService userSettings)
+            IUserSettingsService userSettings, Workout workout)
         {
             _workoutService = workoutService;
             _calorieCalculator = calorieCalculator;
             _userSettingsService = userSettings;
 
-            WorkoutTypes = new ObservableCollection<WorkoutType>(Enum.GetValues<WorkoutType>());
-            Intensities = new ObservableCollection<Intensity>(Enum.GetValues<Intensity>());
-            Statuses = new ObservableCollection<WorkoutStatus>(Enum.GetValues<WorkoutStatus>());
+            WorkoutTypes = [.. Enum.GetValues<WorkoutType>()];
+            Intensities = [.. Enum.GetValues<Intensity>()];
+            Statuses = [.. Enum.GetValues<WorkoutStatus>()];
+        }
+
+        private RelayCommand saveCommand;
+        public RelayCommand SaveCommand
+        {
+            get
+            {
+                return saveCommand ??= new RelayCommand(obj =>
+                {
+                    MessageBox.Show("save");
+                    Save();
+                });
+            }
+        }
+
+        private RelayCommand cancelCommand;
+        public RelayCommand CancelCommand
+        {
+            get
+            {
+                return cancelCommand ??= new RelayCommand(obj =>
+                {
+                    MessageBox.Show("cancel");
+                    Cancel();
+                });
+            }
         }
 
 

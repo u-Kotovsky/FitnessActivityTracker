@@ -1,15 +1,54 @@
-﻿namespace FitnessActivityTracker.Core.Models;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
-public class Workout
+namespace FitnessActivityTracker.Core.Models;
+
+public class Workout : INotifyPropertyChanged
 {
-    public int Id { get; set; }
-    public WorkoutType Type { get; set; } // Бег, Силовая, Йога, Плавание, Велосипед
-    public DateTime Date {  get; set; } // обязательное поле
-    public int DurationMinutes { get; set; } // в минутах
-    public Intensity Intensity { get; set; } // Низкая, Средняя, Высокая
-    public double BurnedCalories { get; set; } // расчетное значение
-    public double? DistanceKm { get; set; } // в км, для кардио-тренировок
-    public string? Notes { get; set; } // самочувствие, достижения)
-    public int Rating { get; set; } // 1 - 5 stars
-    public WorkoutStatus Status { get; set; } // Запланирована, Выполнена, Отменена
+    private int id;
+    public int Id { get { return id; } set { id = value; OnPropertyChanged(); } }
+
+    // Бег, Силовая, Йога, Плавание, Велосипед
+    private WorkoutType type;
+    public WorkoutType Type { get { return type; } set { type = value; OnPropertyChanged(); } }
+
+    // обязательное поле
+    private DateTime date;
+    public DateTime Date { get { return date; } set { date = value; OnPropertyChanged(); } }
+
+    // в минутах
+    private int durationMinutes;
+    public int DurationMinutes { get { return durationMinutes; } set { durationMinutes = value; OnPropertyChanged(); } }
+
+    // Низкая, Средняя, Высокая
+    private Intensity intensity;
+    public Intensity Intensity { get { return intensity; } set { intensity = value; OnPropertyChanged(); } }
+
+    // расчетное значени
+    private double burnedCalories;
+    public double BurnedCalories { get { return burnedCalories; } set { burnedCalories = value; OnPropertyChanged(); } }
+
+    // в км, для кардио-тренировок
+    private double? distanceKm;
+    public double? DistanceKm { get { return distanceKm; } set { distanceKm = value; OnPropertyChanged(); } }
+
+    // самочувствие, достижения)
+    private string? notes;
+    public string? Notes { get { return notes; } set { notes = value; OnPropertyChanged(); } }
+
+    // 1 - 5 stars
+    private int rating;
+    public int Rating { get { return rating; } set { rating = value; OnPropertyChanged(); } }
+
+    // Запланирована, Выполнена, Отменена
+    private WorkoutStatus status;
+    public WorkoutStatus Status { get { return status; } set { status = value; OnPropertyChanged(); } }
+
+
+    public event PropertyChangedEventHandler PropertyChanged;
+    public void OnPropertyChanged([CallerMemberName] string prop = "")
+    {
+        if (PropertyChanged != null)
+            PropertyChanged(this, new PropertyChangedEventArgs(prop));
+    }
 }

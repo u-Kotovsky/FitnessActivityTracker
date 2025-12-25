@@ -18,6 +18,7 @@ namespace FitnessActivityTrackerUI.ViewModels
         public ObservableCollection<Intensity> Intensities { get; }
         public ObservableCollection<WorkoutStatus> Statuses { get; }
 
+        #region Properties
         private Workout _workout;
         public Workout Workout
         {
@@ -119,6 +120,7 @@ namespace FitnessActivityTrackerUI.ViewModels
                 OnPropertyChanged();
             }
         }
+        #endregion
 
         public AddEditWorkoutViewModel(
             IWorkoutService workoutService, 
@@ -140,6 +142,7 @@ namespace FitnessActivityTrackerUI.ViewModels
             _workout = workout;
         }
 
+        #region Commands
         private RelayCommand saveCommand;
         public RelayCommand SaveCommand
         {
@@ -173,7 +176,7 @@ namespace FitnessActivityTrackerUI.ViewModels
         }
 
         public event Action Callback = delegate { };
-
+        #endregion
 
         private void Save()
         {

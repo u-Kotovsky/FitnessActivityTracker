@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FitnessActivityTrackerUI.Windows"
         xmlns:wpfTool="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
         mc:Ignorable="d"
-        Title="Добавить или изменить тренировку" Height="240" Width="300">
+        Title="Добавить или изменить тренировку" Height="240" Width="340" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

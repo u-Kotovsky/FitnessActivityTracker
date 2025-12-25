@@ -59,6 +59,7 @@ public class WorkoutService : IWorkoutService
     {
         var context = FitnessDbContext.GetContext();
         var result = context.Add(workout);
+        context.SaveChanges();
         return result.Entity;
     }
 
@@ -66,6 +67,7 @@ public class WorkoutService : IWorkoutService
     {
         var context = await FitnessDbContext.GetContextAsync();
         var result = await context.AddAsync(workout);
+        context.SaveChanges();
         return result.Entity;
     }
 
@@ -73,12 +75,14 @@ public class WorkoutService : IWorkoutService
     {
         var context = FitnessDbContext.GetContext();
         context.Update(workout);
+        context.SaveChanges();
     }
 
     public async Task UpdateWorkoutAsync(Workout workout)
     {
         var context = await FitnessDbContext.GetContextAsync();
         context.Update(workout);
+        context.SaveChanges();
     }
 
     public bool DeleteWorkout(Workout workout)
@@ -87,6 +91,7 @@ public class WorkoutService : IWorkoutService
         try
         {
             context.Remove(workout);
+            context.SaveChanges();
             return true;
         }
         catch
@@ -101,6 +106,7 @@ public class WorkoutService : IWorkoutService
         try
         {
             context.Remove(workout);
+            context.SaveChanges();
             return true;
         }
         catch

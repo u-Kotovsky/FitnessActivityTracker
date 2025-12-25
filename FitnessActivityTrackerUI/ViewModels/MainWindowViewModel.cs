@@ -24,9 +24,6 @@ namespace FitnessActivityTrackerUI.ViewModels
             _userSettings = userSettingsService;
 
             RefreshCollections();
-
-
-            //ComingWorkouts.Add(new Workout());
         }
 
         private void RefreshCollections()
@@ -47,6 +44,16 @@ namespace FitnessActivityTrackerUI.ViewModels
         public ObservableCollection<Workout> comingWorkouts;
         public ObservableCollection<Workout> ComingWorkouts { get { return comingWorkouts; } set { comingWorkouts = value; OnPropertyChanged(); } }
 
+        private Workout selectedWorkout;
+        public Workout SelectedWorkout
+        {
+            get => selectedWorkout;
+            set
+            {
+                selectedWorkout = value;
+                OnPropertyChanged();
+            }
+        }
 
         private RelayCommand addCommand;
         public RelayCommand AddCommand
@@ -55,8 +62,7 @@ namespace FitnessActivityTrackerUI.ViewModels
             {
                 return addCommand ??= new RelayCommand(obj =>
                 {
-                    var vm = new AddEditWorkoutViewModel(
-                        _workoutService, _calorieCalculator, _userSettings, new Workout());
+                    var vm = new AddEditWorkoutViewModel(_workoutService, _calorieCalculator, _userSettings, new Workout());
                     var window = new AddEditWorkoutWindow(vm);
                     vm.Callback += () =>
                     { 
@@ -77,7 +83,12 @@ namespace FitnessActivityTrackerUI.ViewModels
             {
                 return duplicateCommand ??= new RelayCommand(obj =>
                 {
-                    // TODO: duplicate
+                    if (selectedWorkout == null) return;
+
+                    var workout = selectedWorkout;
+                    workout.Id = 0;
+                    _workoutService.AddWorkout(workout);
+                    RefreshCollections();
                 });
             }
         }
@@ -89,13 +100,15 @@ namespace FitnessActivityTrackerUI.ViewModels
             {
                 return editCommand ??= new RelayCommand(obj =>
                 {
-                    var vm = new AddEditWorkoutViewModel(
-                        _workoutService, _calorieCalculator, _userSettings, null
-                        /* TODO: somehow take workout from onclick event?? */);
+                    if (selectedWorkout == null) return;
+                    var workout = selectedWorkout;
+                    var vm = new AddEditWorkoutViewModel(_workoutService, _calorieCalculator, _userSettings, workout);
                     var window = new AddEditWorkoutWindow(vm);
                     vm.Callback += () =>
                     {
+                        window.Hide();
                         RefreshCollections();
+                        window.Close();
                     };
                     window.ShowDialog();
                 });
@@ -109,13 +122,31 @@ namespace FitnessActivityTrackerUI.ViewModels
             {
                 return cancelCommand ??= new RelayCommand(obj =>
                 {
-                    var vm = new AddEditWorkoutViewModel(
-                        _workoutService, _calorieCalculator, _userSettings, null
-                        /* TODO: somehow take workout from onclick event?? */);
-                    // confirm do you want to cancel workout or not
+                    if (selectedWorkout == null) return;
+
                     if (MessageBox.Show("Вы уверены, что хотите отменить тренировку?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                     {
-                        // TODO: cancel selected workout
+                        selectedWorkout.Status = WorkoutStatus.Cancelled;
+                        _workoutService.UpdateWorkout(selectedWorkout);
+                        RefreshCollections();
+                    }
+                });
+            }
+        }
+
+        private RelayCommand deleteCommand;
+        public RelayCommand DeleteCommand
+        {
+            get
+            {
+                return deleteCommand ??= new RelayCommand(obj =>
+                {
+                    if (selectedWorkout == null) return;
+
+                    if (MessageBox.Show("Вы уверены, что хотите удалить тренировку?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                    {
+                        _workoutService.DeleteWorkout(selectedWorkout);
+                        RefreshCollections();
                     }
                 });
             }

@@ -15,11 +15,11 @@ namespace FitnessActivityTracker.Tests
 
         }
 
-        [Test]
+        /*[Test]
         public void Test()
         {
             Assert.Ignore();
-        }
+        }*/
 
         public void WorkoutViewModel_WithValidWorkout_ShouldReturnValidValues()
         {

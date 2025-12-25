@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FitnessActivityTracker.Data
 {
-    public class FitnessDbContext : DbContext
+    public class FitnessDbContext : DbContext, IDbContext
     {
         public DbSet<Workout> Workouts { get; set; }
 
@@ -12,7 +12,13 @@ namespace FitnessActivityTracker.Data
         }
 
         private static FitnessDbContext Context = null;
-        public async static Task<FitnessDbContext> GetContext()
+        public static FitnessDbContext GetContext()
+        {
+            if (Context == null) Context = new FitnessDbContext();
+            Context.Database.EnsureCreated();
+            return Context;
+        }
+        public async static Task<FitnessDbContext> GetContextAsync()
         {
             if (Context == null) Context = new FitnessDbContext();
             await Context.Database.EnsureCreatedAsync();

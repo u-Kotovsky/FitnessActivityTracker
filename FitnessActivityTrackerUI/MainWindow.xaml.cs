@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using FitnessActivityTracker.Core.Services;
+using FitnessActivityTracker.Data;
 using FitnessActivityTracker.Data.Services;
 using FitnessActivityTrackerUI.ViewModels;
-using FitnessActivityTrackerUI.Windows;
 
 namespace FitnessActivityTrackerUI
 {
@@ -15,11 +15,13 @@ namespace FitnessActivityTrackerUI
         {
             InitializeComponent();
 
-            var workoutService = new WorkoutService();
+            var workoutService = new WorkoutService(FitnessDbContext.GetContext());
             var userSettingsService = new UserSettingsService();
             var calorieCalculatorService = new CalorieCalculatorService();
 
-            DataContext = new MainWindowViewModel(workoutService, calorieCalculatorService, userSettingsService);
+            var vm =  new MainWindowViewModel(workoutService, calorieCalculatorService, userSettingsService);
+
+            DataContext = vm;
         }
     }
 }

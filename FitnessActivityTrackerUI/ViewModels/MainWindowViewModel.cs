@@ -23,23 +23,29 @@ namespace FitnessActivityTrackerUI.ViewModels
             _calorieCalculator = calorieCalculator;
             _userSettings = userSettingsService;
 
-            Workouts = [];
-            CalendarItems = [];
-            ComingWorkouts = [];
+            RefreshCollections();
 
             for (int i = 0; i < 31; i++)
             {
                 CalendarItems.Add(i + 1);
             }
 
-            ComingWorkouts.Add(new Workout());
+            //ComingWorkouts.Add(new Workout());
         }
 
-        public ObservableCollection<Workout> Workouts { get; }
-        
-        public ObservableCollection<int> CalendarItems { get; }
+        private void RefreshCollections()
+        {
+            Workouts = [.. _workoutService.GetAllWorkouts()];
+            CalendarItems = [];
+            ComingWorkouts = [.. _workoutService.GetAllWorkouts().Where(x => x.Status == WorkoutStatus.Planned)];
+        }
 
-        public ObservableCollection<Workout> ComingWorkouts { get; }
+        private ObservableCollection<Workout> workouts;
+        public ObservableCollection<Workout> Workouts { get { return workouts; } set { workouts = value; OnPropertyChanged(); } }
+        private ObservableCollection<int> calendarItems;
+        public ObservableCollection<int> CalendarItems { get { return calendarItems; } set { calendarItems = value; OnPropertyChanged(); } }
+        public ObservableCollection<Workout> comingWorkouts;
+        public ObservableCollection<Workout> ComingWorkouts { get { return comingWorkouts; } set { comingWorkouts = value; OnPropertyChanged(); } }
 
 
         private RelayCommand addCommand;
@@ -52,6 +58,14 @@ namespace FitnessActivityTrackerUI.ViewModels
                     var vm = new AddEditWorkoutViewModel(
                         _workoutService, _calorieCalculator, _userSettings, new Workout());
                     var window = new AddEditWorkoutWindow(vm);
+                    vm.Callback += () =>
+                    { 
+                        window.Hide();
+                        RefreshCollections();
+                        window.Close();
+
+                    };
+                    window.ShowDialog();
                 });
             }
         }
@@ -79,6 +93,11 @@ namespace FitnessActivityTrackerUI.ViewModels
                         _workoutService, _calorieCalculator, _userSettings, null
                         /* TODO: somehow take workout from onclick event?? */);
                     var window = new AddEditWorkoutWindow(vm);
+                    vm.Callback += () =>
+                    {
+                        RefreshCollections();
+                    };
+                    window.ShowDialog();
                 });
             }
         }
@@ -94,7 +113,7 @@ namespace FitnessActivityTrackerUI.ViewModels
                         _workoutService, _calorieCalculator, _userSettings, null
                         /* TODO: somehow take workout from onclick event?? */);
                     // confirm do you want to cancel workout or not
-                    if (MessageBox.Show("", "", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                    if (MessageBox.Show("Вы уверены, что хотите отменить тренировку?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                     {
                         // TODO: cancel selected workout
                     }

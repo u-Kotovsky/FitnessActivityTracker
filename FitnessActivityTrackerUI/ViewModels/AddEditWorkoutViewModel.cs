@@ -64,13 +64,13 @@ namespace FitnessActivityTrackerUI.ViewModels
             }
         }
 
-        public int DurationMinutes
+        public int? DurationMinutes
         {
-            get => Workout?.DurationMinutes ?? 0;
+            get => Workout?.DurationMinutes;
             set
             {
                 if (Workout == null) return;
-                Workout.DurationMinutes = value;
+                Workout.DurationMinutes = value ?? default;
                 OnPropertyChanged();
             }
         }
@@ -122,7 +122,8 @@ namespace FitnessActivityTrackerUI.ViewModels
         public AddEditWorkoutViewModel(
             IWorkoutService workoutService, 
             ICalorieCalculatorService calorieCalculator, 
-            IUserSettingsService userSettings, Workout workout)
+            IUserSettingsService userSettings, 
+            Workout workout)
         {
             _workoutService = workoutService;
             _calorieCalculator = calorieCalculator;
@@ -131,6 +132,8 @@ namespace FitnessActivityTrackerUI.ViewModels
             WorkoutTypes = [.. Enum.GetValues<WorkoutType>()];
             Intensities = [.. Enum.GetValues<Intensity>()];
             Statuses = [.. Enum.GetValues<WorkoutStatus>()];
+
+            _workout = workout;
         }
 
         private RelayCommand saveCommand;
@@ -140,9 +143,13 @@ namespace FitnessActivityTrackerUI.ViewModels
             {
                 return saveCommand ??= new RelayCommand(obj =>
                 {
-                    MessageBox.Show("save");
                     Save();
+                    Callback?.Invoke();
                 });
+            }
+            set
+            {
+                saveCommand = value;
             }
         }
 
@@ -153,14 +160,20 @@ namespace FitnessActivityTrackerUI.ViewModels
             {
                 return cancelCommand ??= new RelayCommand(obj =>
                 {
-                    MessageBox.Show("cancel");
                     Cancel();
+                    Callback?.Invoke();
                 });
+            }
+            set
+            {
+                cancelCommand = value;
             }
         }
 
+        public event Action Callback = delegate { };
 
-        private async void Save()
+
+        private void Save()
         {
             if (!string.IsNullOrEmpty(this.InputDataError))
             {
@@ -169,16 +182,19 @@ namespace FitnessActivityTrackerUI.ViewModels
 
             try
             {
+                if (Workout == null)
+                    throw new Exception("Workout is null");
+
                 Workout.BurnedCalories = _calorieCalculator.CalculateCalories(
                     Workout.Type, Workout.DurationMinutes, Workout.Intensity, _userSettingsService.GetUserWeightKg());
 
                 if (Workout.Id == 0)
                 {
-                    await _workoutService.AddWorkoutAsync(Workout);
+                    _workoutService.AddWorkout(Workout);
                 }
                 else
                 {
-                    await _workoutService.UpdateWorkoutAsync(Workout);
+                    _workoutService.UpdateWorkout(Workout);
                 }
             }
             catch (Exception ex)
